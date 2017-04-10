@@ -1,0 +1,17 @@
+version: "2"
+settings:
+  save_conductor_container: true
+services:
+  web:
+    from: centos:7
+    entrypoint: ['/usr/bin/entrypoint.sh']
+    working_dir: /
+    user: apache
+    command: [/usr/bin/dumb-init, httpd, -DFOREGROUND]
+    ports:
+    - 8000:8080
+    - 4443:8443
+    roles:
+    - apache-container
+  
+registries: {}
