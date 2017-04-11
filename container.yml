@@ -18,5 +18,8 @@ services:
       - port: 8443
         tls:
           termination: passthrough 
+    # For host volume to work on OpenShift, 'oc edit scc restricted', and set 'allowHostDirVolumePlugin: true'
+    volumes:
+      - /Users/chouseknecht/projects/test-mkii/static:/var/www/static
 
 registries: {}
