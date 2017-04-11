@@ -1,6 +1,6 @@
 version: "2"
 settings:
-  save_conductor_container: true
+  save_conductor_container: false 
 services:
   web:
     from: centos:7
@@ -13,5 +13,10 @@ services:
     - 4443:8443
     roles:
     - apache-container
-  
+    openshift:
+      routes:
+      - port: 8443
+        tls:
+          termination: passthrough 
+
 registries: {}
