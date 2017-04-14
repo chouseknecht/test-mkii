@@ -1,10 +1,10 @@
-version: "2"
+version: '2'
 settings:
-  save_conductor_container: false 
+  save_conductor_container: false
 services:
   web:
     from: centos:7
-    entrypoint: ['/usr/bin/entrypoint.sh']
+    entrypoint: [/usr/bin/entrypoint.sh]
     working_dir: /
     user: apache
     command: [/usr/bin/dumb-init, httpd, -DFOREGROUND]
@@ -13,23 +13,33 @@ services:
     - 4443:8443
     roles:
     - apache-container
-    openshift:
-      state: present
-      deployment:
-        force: false 
-      routes:
-      - port: 8443
-        tls:
-          termination: passthrough 
-        force: false 
     volumes:
       # For host volume to work on OpenShift, 'oc edit scc restricted', and set 'allowHostDirVolumePlugin: true'
       - /Users/chouseknecht/projects/test-mkii/static:/var/www/static
       # named volume
-      - static-content:/var/www/static2 
+      - static-content:/var/www/static2
       # empty dir
       - /var/www/static3
-
+    openshift:
+      state: present
+      service:
+        force: false
+      deployment:
+        force: true
+        replicas: 2
+        strategy:
+          type: Rolling
+          rolling_params:
+            timeout_seconds: 120
+            max_surge: 20%
+            max_unavailable: 10%
+            pre: {}
+            post: {}
+      routes:
+      - port: 4443
+        tls:
+          termination: passthrough
+        force: true
 volumes:
   static-content:
     docker: {}
@@ -38,6 +48,6 @@ volumes:
       state: present
       access_modes:
       - ReadWriteOnce
-      requested_storage: 5Gi
-  
+      requested_storage: 1Gi
+
 registries: {}
