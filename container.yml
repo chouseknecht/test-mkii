@@ -1,9 +1,9 @@
 version: '2'
 settings:
-  save_conductor_container: false
+  conductor_base: ubuntu:xenial 
 services:
   web:
-    from: centos:7
+    from: ubuntu:xenial
     entrypoint: [/usr/bin/entrypoint.sh]
     working_dir: /
     user: apache
@@ -12,7 +12,9 @@ services:
     - 8000:8080
     - 4443:8443
     roles:
-    - apache-container
+    - role: setup
+      gather_facts: no
+    - role: geerlingguy.apache 
     volumes:
       # For host volume to work on OpenShift, 'oc edit scc restricted', and set 'allowHostDirVolumePlugin: true'
       - /Users/chouseknecht/projects/test-mkii/static:/var/www/static

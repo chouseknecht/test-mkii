@@ -1,0 +1,6 @@
+- name: Update installed packages 
+  raw: apt-get update -y
+
+- name: Install Python 
+  raw: apt-get install -y python-minimal apt-utils
+
